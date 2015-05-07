@@ -3,28 +3,31 @@ package app;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import sqlConnection.SQL;
+import com.mysql.jdbc.Connection;
+
+import dbo.DBOitems;
+import sqlConnection.Conn;
 
 public class App {
 
 	public static void main(String[] args) {
 
-		SQL conn = null;
+		java.sql.Connection conn=null;
+		
 		try {
 
-			conn = new SQL();
+			conn = Conn.getConnection();
 
-			conn.dropTable("items");
+			DBOitems itemsDBO=new DBOitems();
 
-			conn.createTableItems();
 
 			for (int i = 0; i < 30; i++) {
 
-				conn.insertItems("item ", Integer.toString(i));
-
+				itemsDBO.insert("item ", i,conn);
+				
 			}
 
-			ResultSet rs = conn.selectAll("items");
+			ResultSet rs = itemsDBO.selectAll(conn);
 
 			while (rs.next()) {
 				System.out.print((rs.getString("name") + "  "
@@ -36,7 +39,7 @@ public class App {
 			e.printStackTrace();
 		} finally {
 
-			conn.close();
+			Conn.close(conn);
 		}
 
 	}

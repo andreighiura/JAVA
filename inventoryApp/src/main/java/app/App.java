@@ -9,8 +9,11 @@ public class App {
 
 	public static void main(String[] args) {
 
+		SQL conn = null;
 		try {
-			SQL conn = new SQL();
+
+			conn = new SQL();
+
 			conn.dropTable("items");
 
 			conn.createTableItems();
@@ -31,8 +34,10 @@ public class App {
 		} catch (SQLException | ClassNotFoundException e) {
 
 			e.printStackTrace();
+		} finally {
+
+			conn.close();
 		}
 
 	}
-
 }

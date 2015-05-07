@@ -28,11 +28,21 @@ public class SQL {
 
 	}
 
+	public void close() {
+		try {
+			this.conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public Connection getConnection() throws SQLException,
 			ClassNotFoundException {
 		System.out.print("establishing connection" + "\n");
 
 		Properties connectionProps = new Properties();
+
 		connectionProps.put("user", this.userName);
 		connectionProps.put("password", this.password);
 		String url = "jdbc:" + this.dbms + "://" + this.serverName + ":"
@@ -40,7 +50,7 @@ public class SQL {
 
 		// Class.forName("JDBC_DRIVER");
 
-		conn = DriverManager.getConnection(url, this.userName, this.password);// connectionProps);
+		conn = DriverManager.getConnection(url, connectionProps);// connectionProps);
 
 		if (conn == null) {
 			System.out.print("Connection failed!");

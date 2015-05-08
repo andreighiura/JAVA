@@ -16,7 +16,6 @@ public class App {
 
 		console.space();
 		console.selectAllUsers();
-		console.insertItem("mar", 5, "21341");
 		console.space();
 		console.selectAllItems();
 		console.space();

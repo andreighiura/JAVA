@@ -23,6 +23,7 @@ public class Service {
 		Connection conn = null;
 		try {
 			conn = Conn.getConnection();
+
 			itemsDAO.insert(name, id, owner, conn);
 
 		} catch (ClassNotFoundException e) {

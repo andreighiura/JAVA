@@ -52,13 +52,11 @@ public class ItemsDAO {
 
 	public List<Item> getPosesions(Connection conn, String userName)
 			throws SQLException {
-		ResultSet rs;
 
 		PreparedStatement sql = conn
 				.prepareStatement("SELECT items.id, items.name,items.userID FROM users INNER JOIN items ON ?=users.userName AND users.userID=items.userID");
 		sql.setString(1, userName);
-
-		rs = sql.executeQuery();
+		ResultSet rs = sql.executeQuery();
 
 		List<Item> list = new ArrayList<Item>();
 		while (rs.next()) {

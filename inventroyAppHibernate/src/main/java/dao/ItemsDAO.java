@@ -3,17 +3,14 @@ package dao;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import entities.Item;
 
 public class ItemsDAO {
 
-	public void insert(String name, String owner, Session conn) {
-		Transaction t = conn.beginTransaction();
-		Item item = new Item(name, owner);
+	public void insert(Item item, Session conn) {
+
 		conn.save(item);
-		t.commit();
 
 	}
 
@@ -25,15 +22,22 @@ public class ItemsDAO {
 		return list;
 	}
 
-	public List<Item> getPosesions(Session conn, String userName) {
-
-		String hql = "SELECT item.id, item.name, item.userID " + "FROM user "
-				+ "JOIN item " + "on user.userID=item.userID";
-
+	public List<Item> getPosesions(Session ses, String userName) {
+		/*
+		 * String sql =
+		 * "SELECT item.* FROM item INNER JOIN user on user.userID=item.userID";
+		 * 
+		 * @SuppressWarnings("unchecked") List<Item> list = (List<Item>)
+		 * conn.createSQLQuery(sql) .addEntity("entities.Item").list();//
+		 * .setParameter("userName", // "2") .list();
+		 * 
+		 * for (Object i : list) { System.out.print(((Item) i).toString() +
+		 * "\n"); } return list; }
+		 */
 		@SuppressWarnings("unchecked")
-		List<Item> list = conn.createSQLQuery(hql).list();// .setParameter("userName",
-		// "2") .list();
-
+		List<Item> list = ses.createQuery(
+				"from Item i WHERE i.user.userName=' user 98'").list();
+		System.out.print(list.size());
 		return list;
 	}
 }

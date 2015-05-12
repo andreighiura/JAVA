@@ -1,7 +1,10 @@
 package service;
 
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import dao.ItemsDAO;
 import dao.UserDAO;
@@ -9,13 +12,13 @@ import entities.Item;
 import entities.User;
 
 public class Service {
-	private ItemsDAO itemsDAO;
+	private ItemsDAO itemDAO;
 	private UserDAO userDAO;
 	private SessionFactory SF;
 
 	public Service() {
 		SF = HibernateUtil.getSessionFactory();
-		itemsDAO = new ItemsDAO();
+		itemDAO = new ItemsDAO();
 		userDAO = new UserDAO();
 
 	}
@@ -24,55 +27,102 @@ public class Service {
 		return SF.openSession();
 	}
 
-	public void insertItem(String name, String owner) {
+	public void insertItem(Item item) {
+
 		Session ses = this.createConnection();
-		itemsDAO.insert(name, owner, ses);
+		Transaction t = ses.beginTransaction();
+		itemDAO.insert(item, ses);
+		t.commit();
 		ses.close();
 	}
 
-	public void insertUser(String name, String id) {
+	public void insertTestData() {
 		Session ses = this.createConnection();
-		userDAO.insert(name, id, ses);
+		Transaction t = ses.beginTransaction();
+
+		for (int i = 0; i < 10; i++) {
+
+			User user = new User(" user " + Integer.toString(100 - i),
+					Integer.toString(i));
+			userDAO.insert(user, ses);
+			Item item = new Item("mouse_" + i, user);
+			itemDAO.insert(item, ses);
+
+		}
+		t.commit();
 		ses.close();
+	}
+
+	public void insertUsers(List<User> users) {
+
+		Session ses = this.createConnection();
+		Transaction t = ses.beginTransaction();
+		userDAO.insert(users, ses);
+		t.commit();
+		ses.close();
+	}
+
+	public void insertUser(User user) {
+
+		Session ses = this.createConnection();
+		Transaction t = ses.beginTransaction();
+		userDAO.insert(user, ses);
+		t.commit();
+		ses.close();
+
 	}
 
 	public String selectAllUsers() {
+		Session ses = null;
 		String s = "";
-		Session ses = this.createConnection();
 
-		for (User u : userDAO.selectAll(ses)) {
-			s += u.toString();
+		try {
 
+			ses = this.createConnection();
+
+			for (User u : userDAO.selectAll(ses)) {
+				s += u.toString();
+
+			}
+		} finally {
+
+			ses.close();
 		}
-
-		ses.close();
-
 		return s;
 	}
 
 	public String selectAllItems() {
 		String s = "";
-		Session ses = this.createConnection();
+		Session ses = null;
+		try {
+			ses = this.createConnection();
 
-		for (Item u : itemsDAO.selectAll(ses)) {
-			s += u.toString();
+			for (Item u : itemDAO.selectAll(ses)) {
+				s += u.toString();
 
+			}
+		} finally {
+
+			ses.close();
 		}
-
-		ses.close();
-
 		return s;
 	}
 
 	public String getPosesions(String userName) {
 
 		String s = "";
+		Session ses = null;
 
-		Session ses = this.createConnection();
-		for (Item i : itemsDAO.getPosesions(ses, userName)) {
-			s += i.toString();
+		try {
+			ses = this.createConnection();
+			for (Item i : itemDAO.getPosesions(ses, userName)) {
+
+				s += i.toString();
+			}
+		}
+
+		finally {
 			ses.close();
-
 		}
 		return s;
 	}

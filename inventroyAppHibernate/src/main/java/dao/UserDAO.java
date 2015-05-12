@@ -3,17 +3,20 @@ package dao;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import entities.User;
 
 public class UserDAO {
-	public void insert(String name, String id, Session conn) {
-		Transaction t = conn.beginTransaction();
-		User user = new User(name, id);
-		conn.save(user);
-		t.commit();
+	public void insert(User user, Session conn) {
 
+		conn.save(user);
+
+	}
+
+	public void insert(List<User> users, Session conn) {
+		for (User u : users) {
+			insert(u, conn);
+		}
 	}
 
 	public List<User> selectAll(Session conn) {

@@ -35,9 +35,9 @@ public class ItemsDAO {
 		 * "\n"); } return list; }
 		 */
 		@SuppressWarnings("unchecked")
-		List<Item> list = ses.createQuery(
-				"from Item i WHERE i.user.userName=' user 98'").list();
-		System.out.print(list.size());
+		List<Item> list = ses
+				.createQuery("from Item i WHERE i.user.userName=(:userName)")
+				.setString("userName", userName).list();
 		return list;
 	}
 }

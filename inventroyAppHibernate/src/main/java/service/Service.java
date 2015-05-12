@@ -29,52 +29,81 @@ public class Service {
 
 	public void insertItem(Item item) {
 
-		Session ses = this.createConnection();
-		Transaction t = ses.beginTransaction();
-		itemDAO.insert(item, ses);
-		t.commit();
-		ses.close();
+		Session ses = null;
+
+		try {
+
+			ses = this.createConnection();
+
+			Transaction t = ses.beginTransaction();
+			itemDAO.insert(item, ses);
+			t.commit();
+		} finally {
+			ses.close();
+		}
 	}
 
 	public void insertTestData() {
-		Session ses = this.createConnection();
-		Transaction t = ses.beginTransaction();
 
-		for (int i = 0; i < 10; i++) {
+		Session ses = null;
 
-			User user = new User(" user " + Integer.toString(100 - i),
-					Integer.toString(i));
-			userDAO.insert(user, ses);
-			Item item = new Item("mouse_" + i, user);
-			itemDAO.insert(item, ses);
+		try {
 
+			ses = this.createConnection();
+
+			Transaction t = ses.beginTransaction();
+
+			for (int i = 0; i < 10; i++) {
+
+				User user = new User(" user " + Integer.toString(100 - i),
+						Integer.toString(i));
+				userDAO.insert(user, ses);
+				Item item = new Item("mouse_" + i, user);
+				itemDAO.insert(item, ses);
+
+			}
+			t.commit();
+		} finally {
+
+			ses.close();
 		}
-		t.commit();
-		ses.close();
 	}
 
 	public void insertUsers(List<User> users) {
 
-		Session ses = this.createConnection();
-		Transaction t = ses.beginTransaction();
-		userDAO.insert(users, ses);
-		t.commit();
-		ses.close();
+		Session ses = null;
+
+		try {
+
+			ses = this.createConnection();
+
+			Transaction t = ses.beginTransaction();
+			userDAO.insert(users, ses);
+			t.commit();
+		} finally {
+			ses.close();
+		}
 	}
 
 	public void insertUser(User user) {
 
-		Session ses = this.createConnection();
-		Transaction t = ses.beginTransaction();
-		userDAO.insert(user, ses);
-		t.commit();
-		ses.close();
+		Session ses = null;
 
+		try {
+
+			ses = this.createConnection();
+
+			Transaction t = ses.beginTransaction();
+			userDAO.insert(user, ses);
+			t.commit();
+		} finally {
+			ses.close();
+		}
 	}
 
 	public String selectAllUsers() {
-		Session ses = null;
 		String s = "";
+		Session ses = null;
 
 		try {
 

@@ -10,7 +10,7 @@ public class Main {
 
 		print(svc.selectAllItems());
 		// print(svc.selectAllUsers());
-		print(svc.getPosesions("2"));
+		print(svc.getPosesions(" user 9 "));
 	}
 
 	public static void print(String s) {
